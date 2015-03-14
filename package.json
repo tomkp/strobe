@@ -15,8 +15,26 @@
   "homepage": "https://github.com/tomkp/mdma",
   "dependencies": {
     "react-auto-suggest": "git://github.com/tomkp/react-tab-pane",
-    "react-calendar": "git://github.com/tomkp/react-calendar",
-    "react-layout": "git://github.com/tomkp/react-layout",
+    "react-calendar-pane": "git://github.com/tomkp/react-calendar",
+    "react-layout-pane": "git://github.com/tomkp/react-layout",
     "react-split-pane": "git://github.com/tomkp/react-split-pane"
+  },
+  "scripts": {
+    "build": "browserify Application.js -t babelify --outfile bundle.js"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "browserify": "^9.0.3",
+    "reactify": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ]
+    ]
   }
 }
