@@ -15,7 +15,7 @@
   "homepage": "https://github.com/tomkp/mdma",
   "dependencies": {
     "react": "^0.13.0",
-    "react-auto-suggest": "git://github.com/tomkp/react-tab-pane",
+    "react-auto-suggest": "git://github.com/tomkp/react-auto-suggest",
     "react-calendar-pane": "git://github.com/tomkp/react-calendar",
     "react-layout-pane": "git://github.com/tomkp/react-layout",
     "react-split-pane": "git://github.com/tomkp/react-split-pane"

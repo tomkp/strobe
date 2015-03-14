@@ -2,7 +2,94 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>MDMA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css" rel="stylesheet">
+
+    <style>
+
+        *, *:before, *:after {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        * {
+            position: relative;
+        }
+
+        html, body {
+            font-size: 16px;
+            line-height: 1.5rem;
+            height: 100%;
+            min-height: 100%;
+        }
+
+        /* ---- AutoSuggest ---- */
+
+        .AutoSuggest {
+
+            width: 360px;
+            margin: 1rem;
+        }
+
+        .SearchBox {
+            width: 360px;
+            padding: .5rem 1rem;
+            border: 1px solid #ddd;
+        }
+
+        .DropDown {
+            width: 360px;
+            z-index: 2;
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #000;
+            position: absolute;
+        }
+
+        .DropDown .suggestion {
+            line-height: 2rem;
+            padding: 0 1rem;
+        }
+
+        .DropDown .suggestion:hover {
+            background: #eee;
+        }
+
+        .DropDown .selected {
+            background: #ddd;
+        }
+
+        /* ---- Calendar ---- */
+
+        .Calendar {
+            border-collapse: collapse;
+            padding: 0;
+            margin: 1rem;
+            width: 400px;
+        }
+
+        .Calendar th,
+        .Calendar td {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .Calendar .Day:hover {
+            background: #eee;
+        }
+
+        .Calendar .actual {
+            background: #2980b9;
+            color: #fff;
+        }
+
+        .Calendar .other-month {
+            background: #fafafa;
+            color: #aaa;
+        }
+
+    </style>
 </head>
 <body>
 
