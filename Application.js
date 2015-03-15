@@ -23,11 +23,7 @@ var Application = React.createClass({
                 <div>
                     <Calendar onSelect={this.selectedDate}/>
                 </div>
-                <div>
-                    <Scrollable />
-                </div>
             </section>
-
         );
     }
 });
