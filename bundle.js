@@ -9,6 +9,14 @@ var AutoSuggest = require("react-auto-suggest");
 var Application = React.createClass({
     displayName: "Application",
 
+    suggested: function suggested(suggestion) {
+        console.info("suggested", suggestion);
+    },
+
+    selectedDate: function selectedDate(date) {
+        console.info("selected date", date);
+    },
+
     render: function render() {
         return React.createElement(
             "section",
@@ -16,12 +24,12 @@ var Application = React.createClass({
             React.createElement(
                 "div",
                 null,
-                React.createElement(AutoSuggest, null)
+                React.createElement(AutoSuggest, { onSuggestion: this.suggested })
             ),
             React.createElement(
                 "div",
                 null,
-                React.createElement(Calendar, null)
+                React.createElement(Calendar, { onSelect: this.selectedDate })
             )
         );
     }
