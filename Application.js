@@ -2,7 +2,7 @@ var React = require('react');
 
 var Calendar = require('react-calendar-pane');
 var AutoSuggest = require('react-auto-suggest');
-
+var Scrollable = require('react-drag-scroll');
 
 var Application = React.createClass({
 
@@ -22,6 +22,9 @@ var Application = React.createClass({
                 </div>
                 <div>
                     <Calendar onSelect={this.selectedDate}/>
+                </div>
+                <div>
+                    <Scrollable />
                 </div>
             </section>
 
