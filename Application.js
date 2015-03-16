@@ -6,6 +6,10 @@ var Scrollable = require('react-drag-scroll');
 
 var Application = React.createClass({
 
+    suggestions: function() {
+        return ['chicken', 'duck', 'elephant', 'zebra', 'penguin', 'dog', 'cat', 'crocodile'];
+    },
+
     suggested: function(suggestion) {
         console.info('suggested', suggestion);
     },
@@ -18,7 +22,7 @@ var Application = React.createClass({
         return (
             <section>
                 <div>
-                    <AutoSuggest onSuggestion={this.suggested} />
+                    <AutoSuggest suggestions={this.suggestions} onSuggestion={this.suggested} />
                 </div>
                 <div>
                     <Calendar onSelect={this.selectedDate}/>
