@@ -1,10 +1,10 @@
-var React = require('react');
+import React from 'react';
+import AutoSuggest from 'react-auto-suggest';
+import Calendar from 'react-calendar-pane';
+import {Layout, Flex, Fixed} from 'react-layout-pane';
 
-var Calendar = require('react-calendar-pane');
-var AutoSuggest = require('react-auto-suggest');
-var Scrollable = require('react-drag-scroll');
 
-var Application = React.createClass({
+let Application = React.createClass({
 
     suggestions: function() {
         return ['chicken', 'duck', 'elephant', 'zebra', 'penguin', 'dog', 'cat', 'crocodile'];
@@ -20,14 +20,21 @@ var Application = React.createClass({
 
     render: function() {
         return (
-            <section>
-                <div>
+            <Layout type="rows">
+                <Fixed className="header">
                     <AutoSuggest suggestions={this.suggestions} onSuggestion={this.suggested} />
-                </div>
-                <div>
-                    <Calendar onSelect={this.selectedDate}/>
-                </div>
-            </section>
+                </Fixed>
+                <Flex className="content">
+                    <Layout type="columns">
+                        <Fixed>
+                            <Calendar onSelect={this.selectedDate}/>
+                        </Fixed>
+                        <Flex>
+                            innit
+                        </Flex>
+                    </Layout>
+                </Flex>
+            </Layout>
         );
     }
 });
