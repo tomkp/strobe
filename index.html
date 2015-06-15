@@ -66,7 +66,7 @@
             border-collapse: collapse;
             padding: 0;
             margin: 1rem;
-            width: 400px;
+            background: #fff;
         }
 
         .Calendar th,
@@ -75,19 +75,35 @@
             text-align: center;
         }
 
-        .Calendar .Day:hover {
-            background: #eee;
+        .Calendar th {
+            background: #ddd;
         }
 
-        .Calendar .actual {
+        .Calendar .month-header {
+            border-bottom: 1px solid #fff;
+        }
+
+        .Day:hover {
+            background: #eee;
+            color: #000;
+        }
+
+        .Day.today {
+            background: #fafad2;
+            color: #000;
+        }
+
+        .Day.selected {
             background: #2980b9;
             color: #fff;
         }
 
-        .Calendar .other-month {
+        .Day.other-month {
             background: #fafafa;
-            color: #aaa;
+            color: #999;
         }
+
+
 
         .header {
             background: #eee;
