@@ -15,9 +15,9 @@
   "homepage": "https://github.com/tomkp/mdma",
   "dependencies": {
     "react": "^0.13.0",
-    "react-calendar-pane": "0.0.5",
+    "react-calendar-pane": "^0.0.5",
     "react-layout-pane": "^0.1.2",
-    "react-split-pane": "0.0.3"
+    "react-split-pane": "0.0.8"
   },
   "scripts": {
     "build": "browserify Application.js -t -o bundle.js"

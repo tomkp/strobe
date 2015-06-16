@@ -1,5 +1,6 @@
 import React from 'react';
 import AutoSuggest from 'react-auto-suggest';
+import SplitPane from 'react-split-pane';
 import Calendar from 'react-calendar-pane';
 import {Layout, Flex, Fixed} from 'react-layout-pane';
 
@@ -30,7 +31,10 @@ let Application = React.createClass({
                             <Calendar onSelect={this.selectedDate}/>
                         </Fixed>
                         <Flex>
-                            innit
+                            <SplitPane>
+                                <div>left</div>
+                                <div>right</div>
+                            </SplitPane>
                         </Flex>
                     </Layout>
                 </Flex>
