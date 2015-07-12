@@ -14,18 +14,20 @@
   },
   "homepage": "https://github.com/tomkp/mdma",
   "dependencies": {
-    "react": "^0.13.0",
-    "react-calendar-pane": "^0.0.5",
-    "react-layout-pane": "^0.1.2",
-    "react-split-pane": "0.0.8"
+    "react": "^0.13.3",
+    "react-auto-suggest": "^0.0.8",
+    "react-calendar-pane": "^0.0.12",
+    "react-layout-pane": "^0.1.6",
+    "react-split-pane": "^0.1.6",
+    "react-tree-pane": "^0.0.6"
   },
   "scripts": {
     "build": "browserify Application.js -t -o bundle.js"
   },
   "devDependencies": {
-    "babelify": "^5.0.4",
-    "browserify": "^9.0.3",
-    "reactify": "^1.1.0"
+    "babelify": "^6.1.3",
+    "browserify": "^10.2.6",
+    "reactify": "^1.1.1"
   },
   "browserify": {
     "transform": [

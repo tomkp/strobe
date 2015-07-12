@@ -2,7 +2,29 @@ import React from 'react';
 import AutoSuggest from 'react-auto-suggest';
 import SplitPane from 'react-split-pane';
 import Calendar from 'react-calendar-pane';
+import TreePane from 'react-tree-pane';
 import {Layout, Flex, Fixed} from 'react-layout-pane';
+
+
+
+const model = {
+    name: 'Default',
+    children: [
+        { name: 'react-tree-pane', children:[
+            {name: 'demo', children: [
+                {name: 'bundle.js'},
+                {name: 'Example.js'}
+            ]},
+            {name: 'src', children: [
+                {name: 'TreePane.js'}
+            ]},
+            {name: 'test', children: [
+                {name: 'TreePane-test.js'}
+            ]},
+            {name: 'package.json'}
+        ]}
+    ]
+};
 
 
 let Application = React.createClass({
@@ -31,8 +53,10 @@ let Application = React.createClass({
                             <Calendar onSelect={this.selectedDate}/>
                         </Fixed>
                         <Flex>
-                            <SplitPane>
-                                <div>left</div>
+                            <SplitPane split="vertical" minSize="50">
+                                <div>
+                                    <TreePane model={model} />
+                                </div>
                                 <div>right</div>
                             </SplitPane>
                         </Flex>

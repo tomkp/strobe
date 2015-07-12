@@ -1,72 +1,85 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var React = _interopRequire(require("react"));
+var _react = require('react');
 
-var AutoSuggest = _interopRequire(require("react-auto-suggest"));
+var _react2 = _interopRequireDefault(_react);
 
-var SplitPane = _interopRequire(require("react-split-pane"));
+var _reactAutoSuggest = require('react-auto-suggest');
 
-var Calendar = _interopRequire(require("react-calendar-pane"));
+var _reactAutoSuggest2 = _interopRequireDefault(_reactAutoSuggest);
 
-var _reactLayoutPane = require("react-layout-pane");
+var _reactSplitPane = require('react-split-pane');
 
-var Layout = _reactLayoutPane.Layout;
-var Flex = _reactLayoutPane.Flex;
-var Fixed = _reactLayoutPane.Fixed;
+var _reactSplitPane2 = _interopRequireDefault(_reactSplitPane);
 
-var Application = React.createClass({
-    displayName: "Application",
+var _reactCalendarPane = require('react-calendar-pane');
+
+var _reactCalendarPane2 = _interopRequireDefault(_reactCalendarPane);
+
+var _reactTreePane = require('react-tree-pane');
+
+var _reactTreePane2 = _interopRequireDefault(_reactTreePane);
+
+var _reactLayoutPane = require('react-layout-pane');
+
+var model = {
+    name: 'Default',
+    children: [{ name: 'react-tree-pane', children: [{ name: 'demo', children: [{ name: 'bundle.js' }, { name: 'Example.js' }] }, { name: 'src', children: [{ name: 'TreePane.js' }] }, { name: 'test', children: [{ name: 'TreePane-test.js' }] }, { name: 'package.json' }] }]
+};
+
+var Application = _react2['default'].createClass({
+    displayName: 'Application',
 
     suggestions: function suggestions() {
-        return ["chicken", "duck", "elephant", "zebra", "penguin", "dog", "cat", "crocodile"];
+        return ['chicken', 'duck', 'elephant', 'zebra', 'penguin', 'dog', 'cat', 'crocodile'];
     },
 
     suggested: function suggested(suggestion) {
-        console.info("suggested", suggestion);
+        console.info('suggested', suggestion);
     },
 
     selectedDate: function selectedDate(date) {
-        console.info("selected date", date);
+        console.info('selected date', date);
     },
 
     render: function render() {
-        return React.createElement(
-            Layout,
-            { type: "rows" },
-            React.createElement(
-                Fixed,
-                { className: "header" },
-                React.createElement(AutoSuggest, { suggestions: this.suggestions, onSuggestion: this.suggested })
+        return _react2['default'].createElement(
+            _reactLayoutPane.Layout,
+            { type: 'rows' },
+            _react2['default'].createElement(
+                _reactLayoutPane.Fixed,
+                { className: 'header' },
+                _react2['default'].createElement(_reactAutoSuggest2['default'], { suggestions: this.suggestions, onSuggestion: this.suggested })
             ),
-            React.createElement(
-                Flex,
-                { className: "content" },
-                React.createElement(
-                    Layout,
-                    { type: "columns" },
-                    React.createElement(
-                        Fixed,
+            _react2['default'].createElement(
+                _reactLayoutPane.Flex,
+                { className: 'content' },
+                _react2['default'].createElement(
+                    _reactLayoutPane.Layout,
+                    { type: 'columns' },
+                    _react2['default'].createElement(
+                        _reactLayoutPane.Fixed,
                         null,
-                        React.createElement(Calendar, { onSelect: this.selectedDate })
+                        _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.selectedDate })
                     ),
-                    React.createElement(
-                        Flex,
+                    _react2['default'].createElement(
+                        _reactLayoutPane.Flex,
                         null,
-                        React.createElement(
-                            SplitPane,
-                            null,
-                            React.createElement(
-                                "div",
+                        _react2['default'].createElement(
+                            _reactSplitPane2['default'],
+                            { split: 'vertical', minSize: '50' },
+                            _react2['default'].createElement(
+                                'div',
                                 null,
-                                "left"
+                                _react2['default'].createElement(_reactTreePane2['default'], { model: model })
                             ),
-                            React.createElement(
-                                "div",
+                            _react2['default'].createElement(
+                                'div',
                                 null,
-                                "right"
+                                'right'
                             )
                         )
                     )
@@ -76,40 +89,72 @@ var Application = React.createClass({
     }
 });
 
-React.render(React.createElement(Application, null), document.body);
+_react2['default'].render(_react2['default'].createElement(Application, null), document.body);
 
-},{"react":195,"react-auto-suggest":3,"react-calendar-pane":8,"react-layout-pane":14,"react-split-pane":21}],2:[function(require,module,exports){
+},{"react":195,"react-auto-suggest":3,"react-calendar-pane":7,"react-layout-pane":12,"react-split-pane":17,"react-tree-pane":22}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
 var queue = [];
 var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
 
 function drainQueue() {
     if (draining) {
         return;
     }
+    var timeout = setTimeout(cleanUpNextTick);
     draining = true;
-    var currentQueue;
+
     var len = queue.length;
     while(len) {
         currentQueue = queue;
         queue = [];
-        var i = -1;
-        while (++i < len) {
-            currentQueue[i]();
+        while (++queueIndex < len) {
+            currentQueue[queueIndex].run();
         }
+        queueIndex = -1;
         len = queue.length;
     }
+    currentQueue = null;
     draining = false;
+    clearTimeout(timeout);
 }
+
 process.nextTick = function (fun) {
-    queue.push(fun);
-    if (!draining) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
         setTimeout(drainQueue, 0);
     }
 };
 
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
 process.title = 'browser';
 process.browser = true;
 process.env = {};
@@ -141,12 +186,9 @@ process.umask = function() { return 0; };
 },{}],3:[function(require,module,exports){
 "use strict";
 
-module.exports = require("./src/AutoSuggest.js");
-
-},{"./src/AutoSuggest.js":4}],4:[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function _interopRequire(obj) {
+    return obj && obj.__esModule ? obj["default"] : obj;
+};
 
 var React = _interopRequire(require("react"));
 
@@ -250,22 +292,17 @@ var AutoSuggest = React.createClass({
 
     render: function render() {
         var renderer = this.props.children;
-        return React.createElement(
-            "div",
-            { className: this.constructor.displayName },
-            React.createElement(SearchBox, {
-                handleTerm: this.handleTerm,
-                handleSpecial: this.handleSpecial,
-                value: this.state.term
-            }),
-            React.createElement(DropDown, { key: "dropdown",
-                handleClick: this.handleClick,
-                suggestions: this.state.suggestions,
-                display: this.state.displayDropDown,
-                renderer: renderer,
-                index: this.state.index
-            })
-        );
+        return React.createElement("div", { className: this.constructor.displayName }, React.createElement(SearchBox, {
+            handleTerm: this.handleTerm,
+            handleSpecial: this.handleSpecial,
+            value: this.state.term
+        }), React.createElement(DropDown, { key: "dropdown",
+            handleClick: this.handleClick,
+            suggestions: this.state.suggestions,
+            display: this.state.displayDropDown,
+            renderer: renderer,
+            index: this.state.index
+        }));
     }
 });
 
@@ -273,10 +310,12 @@ module.exports = AutoSuggest;
 
 // right
 
-},{"./DropDown":5,"./SearchBox":6,"react":195}],5:[function(require,module,exports){
+},{"./DropDown":4,"./SearchBox":5,"react":195}],4:[function(require,module,exports){
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function _interopRequire(obj) {
+    return obj && obj.__esModule ? obj["default"] : obj;
+};
 
 var React = _interopRequire(require("react/addons"));
 
@@ -315,20 +354,18 @@ var DropDown = React.createClass({
         var styles = {
             display: this.props.display ? "block" : "none"
         };
-        return React.createElement(
-            "div",
-            { className: this.constructor.displayName, style: styles },
-            entries
-        );
+        return React.createElement("div", { className: this.constructor.displayName, style: styles }, entries);
     }
 });
 
 module.exports = DropDown;
 
-},{"./Suggestion":7,"react/addons":23}],6:[function(require,module,exports){
+},{"./Suggestion":6,"react/addons":23}],5:[function(require,module,exports){
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function _interopRequire(obj) {
+    return obj && obj.__esModule ? obj["default"] : obj;
+};
 
 var React = _interopRequire(require("react"));
 
@@ -367,10 +404,12 @@ var SearchBox = React.createClass({
 
 module.exports = SearchBox;
 
-},{"react":195}],7:[function(require,module,exports){
+},{"react":195}],6:[function(require,module,exports){
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function _interopRequire(obj) {
+    return obj && obj.__esModule ? obj["default"] : obj;
+};
 
 var React = _interopRequire(require("react"));
 
@@ -384,22 +423,247 @@ var Suggestion = React.createClass({
         if (selected) {
             classes.push("selected");
         }
-        return React.createElement(
-            "div",
-            { className: classes.join(" "), "data-suggestion": suggestion },
-            suggestion
-        );
+        return React.createElement("div", { className: classes.join(" "), "data-suggestion": suggestion }, suggestion);
     }
 });
 
 module.exports = Suggestion;
 
-},{"react":195}],8:[function(require,module,exports){
-"use strict";
+},{"react":195}],7:[function(require,module,exports){
+'use strict';
 
-module.exports = require("./src/Calendar.js");
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-},{"./src/Calendar.js":10}],9:[function(require,module,exports){
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _Day = require('./Day');
+
+var _Day2 = _interopRequireDefault(_Day);
+
+var _DayOfWeek = require('./DayOfWeek');
+
+var _DayOfWeek2 = _interopRequireDefault(_DayOfWeek);
+
+var _Week = require('./Week');
+
+var _Week2 = _interopRequireDefault(_Week);
+
+var Calendar = _react2['default'].createClass({
+    displayName: 'Calendar',
+
+    propTypes: {
+        onSelect: _react2['default'].PropTypes.func.isRequired,
+        date: _react2['default'].PropTypes.object,
+        month: _react2['default'].PropTypes.object
+    },
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            month: (0, _moment2['default'])()
+        };
+    },
+
+    getInitialState: function getInitialState() {
+        var date = this.props.date;
+        var month = undefined;
+        if (date) {
+            month = this.props.date;
+        } else {
+            month = this.props.month;
+        }
+        return {
+            date: date,
+            month: month
+        };
+    },
+
+    handleClick: function handleClick(event) {
+        var date = event.target.getAttribute('data-date');
+        this.props.onSelect(date);
+        this.setState({
+            date: (0, _moment2['default'])(date)
+        });
+    },
+
+    previous: function previous() {
+        this.setState({
+            month: (0, _moment2['default'])(this.state.month).subtract(1, 'month')
+        });
+    },
+
+    next: function next() {
+        this.setState({
+            month: (0, _moment2['default'])(this.state.month).add(1, 'month')
+        });
+    },
+
+    render: function render() {
+        var classes = ['Calendar', this.props.className].join(' ');
+
+        var actionStyle = {
+            cursor: 'pointer'
+        };
+
+        var today = (0, _moment2['default'])();
+
+        var date = this.state.date;
+        var month = this.state.month;
+
+        var startOfWeekIndex = 0;
+
+        var current = month.clone().startOf('month').day(startOfWeekIndex);
+        var end = month.clone().endOf('month').day(7);
+
+        var elements = [];
+        var days = [];
+        var week = 1;
+        var i = 1;
+        var daysOfWeek = [];
+        var day = current.clone();
+        for (var j = 0; j < 7; j++) {
+            var dayOfWeekKey = 'dayOfWeek' + j;
+            daysOfWeek.push(_react2['default'].createElement(_DayOfWeek2['default'], { key: dayOfWeekKey, date: day.clone() }));
+            day.add(1, 'days');
+        }
+        while (current.isBefore(end)) {
+            var isCurrentMonth = current.isSame(month, 'month');
+            days.push(_react2['default'].createElement(_Day2['default'], { key: i++,
+                date: current.clone(),
+                selected: date,
+                month: month,
+                today: today,
+                isCurrentMonth: isCurrentMonth,
+                handleClick: this.handleClick }));
+            current.add(1, 'days');
+            if (current.day() === 0) {
+                var weekKey = 'week' + week++;
+                elements.push(_react2['default'].createElement(_Week2['default'], { key: weekKey }, days));
+                days = [];
+            }
+        }
+        return _react2['default'].createElement('table', { className: classes }, _react2['default'].createElement('thead', null, _react2['default'].createElement('tr', { className: 'month-header' }, _react2['default'].createElement('th', { className: 'previous', onClick: this.previous, style: actionStyle }, '«'), _react2['default'].createElement('th', { colSpan: '5' }, _react2['default'].createElement('span', { className: 'month' }, month.format('MMMM')), ' ', _react2['default'].createElement('span', { className: 'year' }, month.format('YYYY'))), _react2['default'].createElement('th', { className: 'next', onClick: this.next, style: actionStyle }, '»'))), _react2['default'].createElement('thead', null, _react2['default'].createElement('tr', { className: 'days-header' }, daysOfWeek)), _react2['default'].createElement('tbody', null, elements));
+    }
+});
+
+exports['default'] = Calendar;
+module.exports = exports['default'];
+
+},{"./Day":8,"./DayOfWeek":9,"./Week":10,"moment":11,"react":195}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Day = _react2['default'].createClass({
+    displayName: 'Day',
+
+    propTypes: {
+        handleClick: _react2['default'].PropTypes.func.isRequired,
+        date: _react2['default'].PropTypes.object.isRequired,
+        //month: React.PropTypes.object.isRequired,
+        today: _react2['default'].PropTypes.object.isRequired,
+        selected: _react2['default'].PropTypes.object
+    },
+
+    render: function render() {
+        var classes = ['Day'];
+        if (this.props.today.isSame(this.props.date, 'day')) {
+            classes.push('today');
+        }
+        if (this.props.selected && this.props.selected.isSame(this.props.date, 'day')) {
+            classes.push('selected');
+        }
+        var style = {
+            cursor: 'pointer'
+        };
+        if (!this.props.isCurrentMonth) {
+            classes.push('other-month');
+        }
+        return _react2['default'].createElement('td', { className: classes.join(' '),
+            style: style,
+            'data-date': this.props.date.toISOString(),
+            'data-day': this.props.date.format('D'),
+            onClick: this.props.handleClick }, this.props.date.format('D'));
+    }
+});
+
+exports['default'] = Day;
+module.exports = exports['default'];
+
+},{"react":195}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var DayOfWeek = _react2['default'].createClass({
+    displayName: 'DayOfWeek',
+
+    render: function render() {
+        return _react2['default'].createElement('th', { className: 'DayOfWeek' }, this.props.date.format('dd'));
+    }
+});
+
+exports['default'] = DayOfWeek;
+module.exports = exports['default'];
+
+},{"react":195}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Week = _react2['default'].createClass({
+    displayName: 'Week',
+
+    render: function render() {
+        return _react2['default'].createElement('tr', { className: 'Week' }, this.props.children);
+    }
+});
+
+exports['default'] = Week;
+module.exports = exports['default'];
+
+},{"react":195}],11:[function(require,module,exports){
 //! moment.js
 //! version : 2.10.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -3511,396 +3775,178 @@ module.exports = require("./src/Calendar.js");
     return _moment;
 
 }));
-},{}],10:[function(require,module,exports){
-"use strict";
+},{}],12:[function(require,module,exports){
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var React = _interopRequire(require("react"));
+var _libLayoutJs = require('./lib/Layout.js');
 
-var moment = _interopRequire(require("moment"));
+var _libLayoutJs2 = _interopRequireDefault(_libLayoutJs);
 
-var Day = _interopRequire(require("./Day"));
+var _libFixedJs = require('./lib/Fixed.js');
 
-var DayOfWeek = _interopRequire(require("./DayOfWeek"));
+var _libFixedJs2 = _interopRequireDefault(_libFixedJs);
 
-var Week = _interopRequire(require("./Week"));
+var _libFlexJs = require('./lib/Flex.js');
 
-var Calendar = React.createClass({
-    displayName: "Calendar",
-
-    propTypes: {
-        onSelect: React.PropTypes.func.isRequired,
-        date: React.PropTypes.object,
-        month: React.PropTypes.object
-    },
-
-    getDefaultProps: function getDefaultProps() {
-        return {
-            month: moment()
-        };
-    },
-
-    getInitialState: function getInitialState() {
-        var date = this.props.date;
-        var month = undefined;
-        if (date) {
-            month = this.props.date;
-        } else {
-            month = this.props.month;
-        }
-        return {
-            date: date,
-            month: month
-        };
-    },
-
-    handleClick: function handleClick(event) {
-        var date = event.target.getAttribute("data-date");
-        this.props.onSelect(date);
-        this.setState({
-            date: moment(date)
-        });
-    },
-
-    previous: function previous() {
-        this.setState({
-            month: moment(this.state.month).subtract(1, "month")
-        });
-    },
-
-    next: function next() {
-        this.setState({
-            month: moment(this.state.month).add(1, "month")
-        });
-    },
-
-    render: function render() {
-        var classes = ["Calendar", this.props.className].join(" ");
-
-        var actionStyle = {
-            cursor: "pointer"
-        };
-
-        var today = moment();
-
-        var date = this.state.date;
-        var month = this.state.month;
-
-        var startOfWeekIndex = 0;
-
-        var current = month.clone().startOf("month").day(startOfWeekIndex);
-        var end = month.clone().endOf("month").day(7);
-
-        var elements = [];
-        var days = [];
-        var week = 1;
-        var i = 1;
-        var daysOfWeek = [];
-        var day = current.clone();
-        for (var j = 0; j < 7; j++) {
-            var dayOfWeekKey = "dayOfWeek" + j;
-            daysOfWeek.push(React.createElement(DayOfWeek, { key: dayOfWeekKey, date: day.clone() }));
-            day.add(1, "days");
-        }
-        while (current.isBefore(end)) {
-            var isCurrentMonth = current.isSame(month, "month");
-            days.push(React.createElement(Day, { key: i++,
-                date: current.clone(),
-                selected: date,
-                month: month,
-                today: today,
-                isCurrentMonth: isCurrentMonth,
-                handleClick: this.handleClick }));
-            current.add(1, "days");
-            if (current.day() === 0) {
-                var weekKey = "week" + week++;
-                elements.push(React.createElement(
-                    Week,
-                    { key: weekKey },
-                    days
-                ));
-                days = [];
-            }
-        }
-        return React.createElement(
-            "table",
-            { className: classes },
-            React.createElement(
-                "thead",
-                null,
-                React.createElement(
-                    "tr",
-                    { className: "month-header" },
-                    React.createElement(
-                        "th",
-                        { className: "previous", onClick: this.previous, style: actionStyle },
-                        "«"
-                    ),
-                    React.createElement(
-                        "th",
-                        { colSpan: "5" },
-                        React.createElement(
-                            "span",
-                            { className: "month" },
-                            month.format("MMMM")
-                        ),
-                        " ",
-                        React.createElement(
-                            "span",
-                            { className: "year" },
-                            month.format("YYYY")
-                        )
-                    ),
-                    React.createElement(
-                        "th",
-                        { className: "next", onClick: this.next, style: actionStyle },
-                        "»"
-                    )
-                )
-            ),
-            React.createElement(
-                "thead",
-                null,
-                React.createElement(
-                    "tr",
-                    { className: "days-header" },
-                    daysOfWeek
-                )
-            ),
-            React.createElement(
-                "tbody",
-                null,
-                elements
-            )
-        );
-    }
-});
-
-module.exports = Calendar;
-
-},{"./Day":11,"./DayOfWeek":12,"./Week":13,"moment":9,"react":195}],11:[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var Day = React.createClass({
-    displayName: "Day",
-
-    propTypes: {
-        handleClick: React.PropTypes.func.isRequired,
-        date: React.PropTypes.object.isRequired,
-        month: React.PropTypes.object.isRequired,
-        today: React.PropTypes.object.isRequired,
-        selected: React.PropTypes.object
-    },
-
-    render: function render() {
-        var classes = ["Day"];
-        if (this.props.today.isSame(this.props.date, "day")) {
-            classes.push("today");
-        }
-        if (this.props.selected && this.props.selected.isSame(this.props.date, "day")) {
-            classes.push("selected");
-        }
-        var style = {
-            cursor: "pointer"
-        };
-        if (!this.props.isCurrentMonth) {
-            classes.push("other-month");
-        }
-        return React.createElement(
-            "td",
-            { className: classes.join(" "),
-                style: style,
-                "data-date": this.props.date.toISOString(),
-                onClick: this.props.handleClick },
-            this.props.date.format("D")
-        );
-    }
-});
-
-module.exports = Day;
-
-},{"react":195}],12:[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var DayOfWeek = React.createClass({
-    displayName: "DayOfWeek",
-
-    render: function render() {
-        return React.createElement(
-            "th",
-            { className: "DayOfWeek" },
-            this.props.date.format("dd")
-        );
-    }
-});
-
-module.exports = DayOfWeek;
-
-},{"react":195}],13:[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var Week = React.createClass({
-    displayName: "Week",
-
-    render: function render() {
-        return React.createElement(
-            "tr",
-            { className: "Week" },
-            this.props.children
-        );
-    }
-});
-
-module.exports = Week;
-
-},{"react":195}],14:[function(require,module,exports){
-"use strict";
+var _libFlexJs2 = _interopRequireDefault(_libFlexJs);
 
 module.exports = {
-    Layout: require("./src/Layout.js"),
-    Fixed: require("./src/Fixed.js"),
-    Flex: require("./src/Flex.js")
+    Layout: _libLayoutJs2['default'],
+    Fixed: _libFixedJs2['default'],
+    Flex: _libFlexJs2['default']
 };
 
-},{"./src/Fixed.js":16,"./src/Flex.js":17,"./src/Layout.js":18}],15:[function(require,module,exports){
-module.exports=function(n){function t(i){if(e[i])return e[i].exports;var r=e[i]={exports:{},id:i,loaded:!1};return n[i].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var e={};return t.m=n,t.c=e,t.p="",t(0)}([function(n,t){"use strict";function e(n){return a.js+n[0].toUpperCase()+n.substr(1)}function i(n){return Object.keys(n).reduce(function(t,i){return-1!==s.indexOf(i)?t[e(i)]=n[i]:t[i]=n[i],t},{})}function r(n){var t=navigator.userAgent.toLowerCase();return-1!==t.indexOf("safari")&&-1===t.indexOf("chrome")?!function(){var t=function(n,t,e){n[e]=n[t],delete n[t]};"flex"===n.display&&(n.display="-webkit-flex"),["alignItems","justifyContent","flexDirection","flex","flexWrap"].forEach(function(i){t(n,i,e(i))})}():-1!==navigator.appVersion.indexOf("MSIE 10")&&"flex"===n.display&&(n.display="-ms-flexbox"),n}function o(n){return Object.keys(n).reduce(function(t,e){return t[e]=r(i(n[e])),t},{})}var a=function(){var n=window.getComputedStyle(document.documentElement,""),t=(Array.prototype.slice.call(n).join("").match(/-(moz|webkit|ms)-/)||""===n.OLink&&["","o"])[1];return{dom:"ms"===t?"MS":t,lowercase:t,css:"-"+t+"-",js:"ms"===t?t:t[0].toUpperCase()+t.substr(1)}}(),s=["animation","animationDelay","animationDirection","animationDuration","animationFillMode","animationIterationCount","animationName","animationPlayState","animationTimingFunction","appearance","backfaceVisibility","backgroundClip","borderImage","borderImageSlice","boxSizing","boxShadow","contentColumns","transform","transformOrigin","transformStyle","transition","transitionDelay","transitionDuration","transitionProperty","transitionTimingFunction","perspective","perspectiveOrigin","userSelect"];t.prefix=o}]);
-},{}],16:[function(require,module,exports){
-"use strict";
+},{"./lib/Fixed.js":13,"./lib/Flex.js":14,"./lib/Layout.js":15}],13:[function(require,module,exports){
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-var React = _interopRequire(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
 
-var Fixed = React.createClass({
-    displayName: "Fixed",
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Fixed = _react2['default'].createClass({
+    displayName: 'Fixed',
 
     propTypes: {
-        type: React.PropTypes.string.isRequired
+        type: _react2['default'].PropTypes.string.isRequired
     },
 
     getDefaultProps: function getDefaultProps() {
         return {
-            type: "columns"
+            type: 'columns'
         };
     },
 
     render: function render() {
-        var classes = ["Fixed"];
+        var classes = ['Fixed'];
         if (this.props.className) {
             classes.push(this.props.className);
         }
 
         var styles = undefined;
-        if (this.props.type === "rows") {
+        if (this.props.type === 'rows') {
             styles = {
-                width: "100%"
+                position: 'relative',
+                width: '100%'
             };
         } else {
             styles = {
-                height: "100%"
+                position: 'relative',
+                height: '100%'
             };
         }
 
-        return React.createElement(
-            "div",
-            { className: classes.join(" "), style: styles },
-            this.props.children
-        );
+        return _react2['default'].createElement('div', { className: classes.join(' '), style: styles }, this.props.children);
     }
 });
 
-module.exports = Fixed;
+exports['default'] = Fixed;
+module.exports = exports['default'];
 
-},{"react":195}],17:[function(require,module,exports){
-"use strict";
+},{"react":195}],14:[function(require,module,exports){
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-var React = _interopRequire(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
 
-var VendorPrefix = _interopRequire(require("react-vendor-prefix"));
+var _react = require('react');
 
-var Flex = React.createClass({
-    displayName: "Flex",
+var _react2 = _interopRequireDefault(_react);
+
+var _reactVendorPrefix = require('react-vendor-prefix');
+
+var _reactVendorPrefix2 = _interopRequireDefault(_reactVendorPrefix);
+
+var Flex = _react2['default'].createClass({
+    displayName: 'Flex',
 
     propTypes: {
-        type: React.PropTypes.string.isRequired
+        type: _react2['default'].PropTypes.string.isRequired
     },
 
     getDefaultProps: function getDefaultProps() {
         return {
-            type: "columns"
+            type: 'columns'
         };
     },
 
     render: function render() {
-        var classes = ["Flex"];
+        var classes = ['Flex'];
         if (this.props.className) {
             classes.push(this.props.className);
         }
 
         var style = undefined;
-        if (this.props.type === "rows") {
+        if (this.props.type === 'rows') {
             style = {
-                flex: 1
+                flex: 1,
+                position: 'relative'
             };
         } else {
             style = {
                 flex: 1,
-
-                height: "100%",
-                minHeight: "100%"
+                position: 'relative',
+                height: '100%',
+                minHeight: '100%'
             };
         }
-        var prefixed = VendorPrefix.prefix({ styles: style });
+        var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
 
-        return React.createElement(
-            "div",
-            { className: classes.join(" "), style: prefixed.styles },
-            this.props.children
-        );
+        return _react2['default'].createElement('div', { className: classes.join(' '), style: prefixed.styles }, this.props.children);
     }
 });
 
-module.exports = Flex;
+exports['default'] = Flex;
+module.exports = exports['default'];
 
-},{"react":195,"react-vendor-prefix":15}],18:[function(require,module,exports){
-"use strict";
+},{"react":195,"react-vendor-prefix":16}],15:[function(require,module,exports){
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-var React = _interopRequire(require("react/addons"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
 
-var VendorPrefix = _interopRequire(require("react-vendor-prefix"));
+var _reactAddons = require('react/addons');
 
-var Layout = React.createClass({
-    displayName: "Layout",
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var _reactVendorPrefix = require('react-vendor-prefix');
+
+var _reactVendorPrefix2 = _interopRequireDefault(_reactVendorPrefix);
+
+var Layout = _reactAddons2['default'].createClass({
+    displayName: 'Layout',
 
     propTypes: {
-        type: React.PropTypes.string.isRequired
+        type: _reactAddons2['default'].PropTypes.string.isRequired
     },
 
     getDefaultProps: function getDefaultProps() {
         return {
-            type: "columns"
+            type: 'columns'
         };
     },
 
     render: function render() {
-        var classes = ["Layout"];
+        var classes = ['Layout'];
         if (this.props.className) {
             classes.push(this.props.className);
         }
@@ -3908,170 +3954,181 @@ var Layout = React.createClass({
 
         var style = undefined;
 
-        if (this.props.type === "rows") {
+        if (this.props.type === 'rows') {
             style = {
-                display: "flex",
+                display: 'flex',
                 flex: 1,
-                flexDirection: "column",
+                flexDirection: 'column',
 
-                position: "relative",
-                height: "100%",
-                minHeight: "100%"
+                position: 'relative',
+                height: '100%',
+                minHeight: '100%'
             };
         } else {
             style = {
-                display: "flex",
+                display: 'flex',
                 flex: 1,
-                flexDirection: "row",
+                flexDirection: 'row',
 
-                height: "100%",
-                position: "absolute",
+                height: '100%',
+                position: 'absolute',
                 left: 0,
                 right: 0
             };
         }
 
-        var prefixed = VendorPrefix.prefix({ styles: style });
+        var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
 
         var type = this.props.type;
         var index = 0;
         var elements = [];
         if (this.props.children) {
             elements = this.props.children.map(function (child) {
-                return React.addons.cloneWithProps(child, {
+                return _reactAddons2['default'].addons.cloneWithProps(child, {
                     type: type,
                     key: index++
                 });
             });
         }
 
-        return React.createElement(
-            "div",
-            { className: classes.join(" "), style: prefixed.styles },
-            elements
-        );
+        return _reactAddons2['default'].createElement('div', { className: classes.join(' '), style: prefixed.styles }, elements);
     }
 });
 
-module.exports = Layout;
+exports['default'] = Layout;
+module.exports = exports['default'];
 
-},{"react-vendor-prefix":15,"react/addons":23}],19:[function(require,module,exports){
-"use strict";
+},{"react-vendor-prefix":16,"react/addons":23}],16:[function(require,module,exports){
+module.exports=function(n){function t(i){if(e[i])return e[i].exports;var r=e[i]={exports:{},id:i,loaded:!1};return n[i].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var e={};return t.m=n,t.c=e,t.p="",t(0)}([function(n,t){"use strict";function e(n){return a.js+n[0].toUpperCase()+n.substr(1)}function i(n){return Object.keys(n).reduce(function(t,i){return-1!==s.indexOf(i)?t[e(i)]=n[i]:t[i]=n[i],t},{})}function r(n){var t=navigator.userAgent.toLowerCase();return-1!==t.indexOf("safari")&&-1===t.indexOf("chrome")?!function(){var t=function(n,t,e){n[e]=n[t],delete n[t]};"flex"===n.display&&(n.display="-webkit-flex"),["alignItems","justifyContent","flexDirection","flex","flexWrap"].forEach(function(i){t(n,i,e(i))})}():-1!==navigator.appVersion.indexOf("MSIE 10")&&"flex"===n.display&&(n.display="-ms-flexbox"),n}function o(n){return Object.keys(n).reduce(function(t,e){return t[e]=r(i(n[e])),t},{})}var a=function(){var n=window.getComputedStyle(document.documentElement,""),t=(Array.prototype.slice.call(n).join("").match(/-(moz|webkit|ms)-/)||""===n.OLink&&["","o"])[1];return{dom:"ms"===t?"MS":t,lowercase:t,css:"-"+t+"-",js:"ms"===t?t:t[0].toUpperCase()+t.substr(1)}}(),s=["animation","animationDelay","animationDirection","animationDuration","animationFillMode","animationIterationCount","animationName","animationPlayState","animationTimingFunction","appearance","backfaceVisibility","backgroundClip","borderImage","borderImageSlice","boxSizing","boxShadow","contentColumns","transform","transformOrigin","transformStyle","transition","transitionDelay","transitionDuration","transitionProperty","transitionTimingFunction","perspective","perspectiveOrigin","userSelect"];t.prefix=o}]);
+},{}],17:[function(require,module,exports){
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _libSplitPane = require('./lib/SplitPane');
+
+var _libSplitPane2 = _interopRequireDefault(_libSplitPane);
+
+module.exports = _libSplitPane2['default'];
+
+},{"./lib/SplitPane":20}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
 function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { "default": obj };
+    return obj && obj.__esModule ? obj : { 'default': obj };
 }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactVendorPrefix = require("react-vendor-prefix");
+var _reactVendorPrefix = require('react-vendor-prefix');
 
 var _reactVendorPrefix2 = _interopRequireDefault(_reactVendorPrefix);
 
-var Pane = _react2["default"].createClass({
-    displayName: "Pane",
+var Pane = _react2['default'].createClass({
+    displayName: 'Pane',
 
     getInitialState: function getInitialState() {
         return {};
     },
 
     render: function render() {
-        var orientation = this.props.orientation;
-        var classes = ["Pane", orientation];
+        var split = this.props.split;
+        var classes = ['Pane', split];
 
         var style = {
             flex: 1,
-            outline: "none",
-            overflow: "auto"
+            position: 'relative',
+            outline: 'none',
+            overflow: 'auto'
         };
         if (this.state.size) {
-            if (orientation === "vertical") {
+            if (split === 'horizontal') {
                 style.height = this.state.size;
-                style.display = "flex";
+                style.display = 'flex';
             } else {
                 style.width = this.state.size;
             }
-            style.flex = "none";
+            style.flex = 'none';
         }
-        var prefixed = _reactVendorPrefix2["default"].prefix({ styles: style });
-        return _react2["default"].createElement("div", { className: classes.join(" "), style: prefixed.styles }, this.props.children);
+        var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
+        return _react2['default'].createElement('div', { className: classes.join(' '), style: prefixed.styles }, this.props.children);
     }
 });
 
-exports["default"] = Pane;
-module.exports = exports["default"];
+exports['default'] = Pane;
+module.exports = exports['default'];
 
-},{"react":195,"react-vendor-prefix":22}],20:[function(require,module,exports){
-"use strict";
+},{"react":195,"react-vendor-prefix":21}],19:[function(require,module,exports){
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
 function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { "default": obj };
+    return obj && obj.__esModule ? obj : { 'default': obj };
 }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var Resizer = _react2["default"].createClass({
-    displayName: "Resizer",
+var Resizer = _react2['default'].createClass({
+    displayName: 'Resizer',
 
     handleDown: function handleDown(event) {
         this.props.down(event);
     },
 
     render: function render() {
-        var orientation = this.props.orientation;
-        var classes = ["Resizer", orientation];
-        return _react2["default"].createElement("span", { className: classes.join(" "), onMouseDown: this.handleDown });
+        var split = this.props.split;
+        var classes = ['Resizer', split];
+        return _react2['default'].createElement('span', { className: classes.join(' '), onMouseDown: this.handleDown });
     }
 });
 
-exports["default"] = Resizer;
-module.exports = exports["default"];
+exports['default'] = Resizer;
+module.exports = exports['default'];
 
-},{"react":195}],21:[function(require,module,exports){
-"use strict";
+},{"react":195}],20:[function(require,module,exports){
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
 function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { "default": obj };
+    return obj && obj.__esModule ? obj : { 'default': obj };
 }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Pane = require("./Pane");
+var _Pane = require('./Pane');
 
 var _Pane2 = _interopRequireDefault(_Pane);
 
-var _Resizer = require("./Resizer");
+var _Resizer = require('./Resizer');
 
 var _Resizer2 = _interopRequireDefault(_Resizer);
 
-var _reactVendorPrefix = require("react-vendor-prefix");
+var _reactVendorPrefix = require('react-vendor-prefix');
 
 var _reactVendorPrefix2 = _interopRequireDefault(_reactVendorPrefix);
 
-var SplitPane = _react2["default"].createClass({
-    displayName: "SplitPane",
+var SplitPane = _react2['default'].createClass({
+    displayName: 'SplitPane',
 
     propTypes: {
-        minSize: _react2["default"].PropTypes.number,
-        orientation: _react2["default"].PropTypes.string
+        minSize: _react2['default'].PropTypes.number,
+        split: _react2['default'].PropTypes.string
     },
 
     getInitialState: function getInitialState() {
@@ -4087,17 +4144,17 @@ var SplitPane = _react2["default"].createClass({
     },
 
     componentDidMount: function componentDidMount() {
-        document.addEventListener("mouseup", this.up);
-        document.addEventListener("mousemove", this.move);
+        document.addEventListener('mouseup', this.up);
+        document.addEventListener('mousemove', this.move);
     },
 
     componentWillUnmount: function componentWillUnmount() {
-        document.removeEventListener("mouseup", this.up);
-        document.removeEventListener("mousemove", this.move);
+        document.removeEventListener('mouseup', this.up);
+        document.removeEventListener('mousemove', this.move);
     },
 
     down: function down(event) {
-        var position = this.props.orientation === "horizontal" ? event.clientX : event.clientY;
+        var position = this.props.split === 'vertical' ? event.clientX : event.clientY;
         this.setState({
             active: true,
             position: position
@@ -4111,10 +4168,10 @@ var SplitPane = _react2["default"].createClass({
                 var node = ref.getDOMNode();
                 if (window.getComputedStyle) {
                     var styles = window.getComputedStyle(node);
-                    var width = styles.width.replace("px", "");
-                    var height = styles.height.replace("px", "");
-                    var current = this.props.orientation === "horizontal" ? event.clientX : event.clientY;
-                    var size = this.props.orientation === "horizontal" ? width : height;
+                    var width = styles.width.replace('px', '');
+                    var height = styles.height.replace('px', '');
+                    var current = this.props.split === 'vertical' ? event.clientX : event.clientY;
+                    var size = this.props.split === 'vertical' ? width : height;
                     var position = this.state.position;
                     var newSize = size - (position - current);
                     this.setState({
@@ -4143,32 +4200,32 @@ var SplitPane = _react2["default"].createClass({
     },
 
     render: function render() {
-        var orientation = this.props.orientation || "vertical";
+        var split = this.props.split || 'vertical';
 
         var style = {
-            display: "flex",
+            display: 'flex',
             flex: 1,
-            position: "relative",
-            outline: "none",
-            overflow: "hidden",
-            userSelect: "none"
+            position: 'relative',
+            outline: 'none',
+            overflow: 'hidden',
+            userSelect: 'none'
         };
 
-        if (orientation === "vertical") {
+        if (split === 'horizontal') {
             this.merge(style, {
-                flexDirection: "column",
-                height: "100%",
-                minHeight: "100%",
-                position: "absolute",
+                flexDirection: 'column',
+                height: '100%',
+                minHeight: '100%',
+                position: 'absolute',
                 top: 0,
                 bottom: 0,
-                width: "100%"
+                width: '100%'
             });
         } else {
             this.merge(style, {
-                flexDirection: "row",
-                height: "100%",
-                position: "absolute",
+                flexDirection: 'row',
+                height: '100%',
+                position: 'absolute',
                 left: 0,
                 right: 0
             });
@@ -4178,24 +4235,165 @@ var SplitPane = _react2["default"].createClass({
         var children = this.props.children;
         var child0 = children[0];
         var child1 = children[1];
-        elements.push(_react2["default"].createElement(_Pane2["default"], { ref: "pane1", key: "pane1", orientation: orientation }, child0));
-        elements.push(_react2["default"].createElement(_Resizer2["default"], { ref: "resizer", key: "resizer", down: this.down, orientation: orientation }));
-        elements.push(_react2["default"].createElement(_Pane2["default"], { ref: "pane2", key: "pane2", orientation: orientation }, child1));
+        elements.push(_react2['default'].createElement(_Pane2['default'], { ref: 'pane1', key: 'pane1', split: split }, child0));
+        elements.push(_react2['default'].createElement(_Resizer2['default'], { ref: 'resizer', key: 'resizer', down: this.down, split: split }));
+        elements.push(_react2['default'].createElement(_Pane2['default'], { ref: 'pane2', key: 'pane2', split: split }, child1));
 
-        var classes = ["SplitPane", orientation];
+        var classes = ['SplitPane', split];
 
-        var prefixed = _reactVendorPrefix2["default"].prefix({ styles: style });
+        var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
 
-        return _react2["default"].createElement("div", { className: classes.join(" "), style: prefixed.styles, ref: "splitPane" }, elements);
+        return _react2['default'].createElement('div', { className: classes.join(' '), style: prefixed.styles, ref: 'splitPane' }, elements);
     }
 });
 
-exports["default"] = SplitPane;
-module.exports = exports["default"];
+exports['default'] = SplitPane;
+module.exports = exports['default'];
 
-},{"./Pane":19,"./Resizer":20,"react":195,"react-vendor-prefix":22}],22:[function(require,module,exports){
-arguments[4][15][0].apply(exports,arguments)
-},{"dup":15}],23:[function(require,module,exports){
+},{"./Pane":18,"./Resizer":19,"react":195,"react-vendor-prefix":21}],21:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"dup":16}],22:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+})();
+
+var _get = function get(_x, _x2, _x3) {
+    var _again = true;_function: while (_again) {
+        var object = _x,
+            property = _x2,
+            receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+            var parent = Object.getPrototypeOf(object);if (parent === null) {
+                return undefined;
+            } else {
+                _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
+            }
+        } else if ('value' in desc) {
+            return desc.value;
+        } else {
+            var getter = desc.get;if (getter === undefined) {
+                return undefined;
+            }return getter.call(receiver);
+        }
+    }
+};
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { 'default': obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
+}
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var TreePane = (function (_React$Component) {
+    function TreePane() {
+        _classCallCheck(this, TreePane);
+
+        _get(Object.getPrototypeOf(TreePane.prototype), 'constructor', this).apply(this, arguments);
+    }
+
+    _inherits(TreePane, _React$Component);
+
+    _createClass(TreePane, [{
+        key: 'render',
+        value: function render() {
+            return _react2['default'].createElement('div', { className: 'TreePane' }, _react2['default'].createElement(Node, { model: this.props.model, renderer: this.props.renderer }));
+        }
+    }]);
+
+    return TreePane;
+})(_react2['default'].Component);
+
+exports['default'] = TreePane;
+
+var DefaultCellRenderer = (function (_React$Component2) {
+    function DefaultCellRenderer() {
+        _classCallCheck(this, DefaultCellRenderer);
+
+        _get(Object.getPrototypeOf(DefaultCellRenderer.prototype), 'constructor', this).apply(this, arguments);
+    }
+
+    _inherits(DefaultCellRenderer, _React$Component2);
+
+    _createClass(DefaultCellRenderer, [{
+        key: 'render',
+        value: function render() {
+            return _react2['default'].createElement('span', null, this.props.model.name);
+        }
+    }]);
+
+    return DefaultCellRenderer;
+})(_react2['default'].Component);
+
+var Node = _react2['default'].createClass({
+    displayName: 'Node',
+
+    toggle: function toggle() {
+        this.setState({ expanded: !this.state.expanded });
+    },
+
+    getInitialState: function getInitialState() {
+        return {
+            expanded: true
+        };
+    },
+
+    render: function render() {
+        var childNodes = [];
+        var classes = [];
+        var children = this.props.model.children;
+        var renderer = this.props.renderer;
+
+        if (children) {
+            if (this.state.expanded) {
+                childNodes = children.map(function (node, index) {
+                    return _react2['default'].createElement(Node, { key: index, model: node, renderer: renderer });
+                });
+            }
+            classes.push('toggle');
+            classes.push(this.state.expanded ? 'collapse' : 'expand');
+        }
+
+        var cellRenderer = undefined;
+
+        if (renderer) {
+            cellRenderer = _react2['default'].addons.cloneWithProps(renderer, {
+                model: this.props.model
+            });
+        } else {
+            cellRenderer = _react2['default'].createElement(DefaultCellRenderer, { model: this.props.model });
+        }
+
+        return _react2['default'].createElement('div', { className: 'Node' }, _react2['default'].createElement('div', { onClick: this.toggle, className: classes.join(' ') }, cellRenderer), childNodes);
+    }
+});
+module.exports = exports['default'];
+
+},{"react":195}],23:[function(require,module,exports){
 module.exports = require('./lib/ReactWithAddons');
 
 },{"./lib/ReactWithAddons":123}],24:[function(require,module,exports){
