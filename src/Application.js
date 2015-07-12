@@ -6,6 +6,65 @@ import TreePane from 'react-tree-pane';
 import {Layout, Flex, Fixed} from 'react-layout-pane';
 
 
+import jsonp from 'jsonp';
+
+
+
+let Custom = React.createClass({
+
+    render() {
+        var suggestion = this.props.suggestion;
+        let classes = ['Suggestion'];
+        if (this.props.selected) {
+            classes.push('selected');
+        }
+        return (
+            <div className={classes.join(' ')} data-suggestion={suggestion.title}>
+                <span className="titles">
+                    <div className="series-title">{suggestion.seriesName?suggestion.seriesName:''}</div>
+                    <div className="title">{suggestion.title}</div>
+                </span>
+            </div>
+        );
+    }
+});
+
+
+let DemoSuggest = React.createClass({
+
+    suggestions: function(value, callback) {
+        jsonp('http://api.search.sky.com/query.json?category=newtv&term=' + value, function(err, data) {
+            if (!err) {
+                if (data.searchResults) {
+                    var results = data.searchResults.map(function (result) {
+                        return result;
+                    });
+                    callback(results);
+                }
+            }
+
+        })
+    },
+
+    onSuggestion: function(suggestion) {
+        this.props.onSuggestion(suggestion);
+    },
+
+    onSelect: function(suggestion) {
+        return suggestion.title;
+    },
+
+
+    render: function() {
+        return (
+            <AutoSuggest suggestions={this.suggestions} onSuggestion={this.onSuggestion} onSelect={this.onSelect}>
+                <Custom />
+            </AutoSuggest>
+        );
+    }
+
+});
+
 
 let DemoTree = React.createClass({
 
@@ -39,11 +98,8 @@ let DemoTree = React.createClass({
 
 let Application = React.createClass({
 
-    suggestions() {
-        return ['chicken', 'duck', 'elephant', 'zebra', 'penguin', 'dog', 'cat', 'crocodile'];
-    },
 
-    suggested(suggestion) {
+    onSuggestion(suggestion) {
         console.info('suggested', suggestion);
     },
 
@@ -55,7 +111,7 @@ let Application = React.createClass({
         return (
             <Layout type="rows">
                 <Fixed className="header">
-                    <AutoSuggest suggestions={this.suggestions} onSuggestion={this.suggested} />
+                    <DemoSuggest onSuggestion={this.onSuggestion} />
                 </Fixed>
                 <Flex className="content">
                     <Layout type="columns">

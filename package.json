@@ -13,8 +13,9 @@
   },
   "homepage": "https://github.com/tomkp/mdma",
   "dependencies": {
+    "jsonp": "^0.2.0",
     "react": "^0.13.3",
-    "react-auto-suggest": "^0.0.8",
+    "react-auto-suggest": "^0.0.9",
     "react-calendar-pane": "^0.0.12",
     "react-layout-pane": "^0.1.6",
     "react-split-pane": "^0.1.6",

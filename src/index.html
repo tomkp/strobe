@@ -13,6 +13,9 @@
             box-sizing: border-box;
         }
 
+        * {
+            position: relative;
+        }
 
         html, body {
             font-size: 16px;
@@ -24,37 +27,49 @@
         /* ---- AutoSuggest ---- */
 
         .AutoSuggest {
-
-            width: 360px;
+            width: 480px;
             margin: 1rem;
+            display: inline-block;
         }
 
         .SearchBox {
-            width: 360px;
+            width: 480px;
             padding: .5rem 1rem;
             border: 1px solid #ddd;
         }
 
         .DropDown {
-            width: 360px;
             z-index: 2;
+            width: 100%;
             background: #fff;
             border: 1px solid #ddd;
             color: #000;
             position: absolute;
+
+            -moz-box-shadow: 0 2px 5px #888;
+            -webkit-box-shadow: 0 2px 5px #888;
+            box-shadow: 0 2px 5px #888;
         }
 
-        .DropDown .suggestion {
+        .Suggestion {
             line-height: 2rem;
             padding: 0 1rem;
         }
 
-        .DropDown .suggestion:hover {
+        .Suggestion:hover {
             background: #eee;
         }
 
-        .DropDown .selected {
+        .selected {
             background: #ddd;
+        }
+
+        .title {
+            color: #666;
+        }
+
+        .thumbnail {
+            float: left;
         }
 
         /* ---- Calendar ---- */
