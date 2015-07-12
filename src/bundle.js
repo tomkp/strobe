@@ -26100,10 +26100,20 @@ var _reactTreePane2 = _interopRequireDefault(_reactTreePane);
 
 var _reactLayoutPane = require('react-layout-pane');
 
-var model = {
-    name: 'Default',
-    children: [{ name: 'react-tree-pane', children: [{ name: 'demo', children: [{ name: 'bundle.js' }, { name: 'Example.js' }] }, { name: 'src', children: [{ name: 'TreePane.js' }] }, { name: 'test', children: [{ name: 'TreePane-test.js' }] }, { name: 'package.json' }] }]
-};
+var DemoTree = _react2['default'].createClass({
+    displayName: 'DemoTree',
+
+    getInitialState: function getInitialState() {
+        return {
+            name: 'Default',
+            children: [{ name: 'react-tree-pane', children: [{ name: 'demo', children: [{ name: 'bundle.js' }, { name: 'Example.js' }] }, { name: 'src', children: [{ name: 'TreePane.js' }] }, { name: 'test', children: [{ name: 'TreePane-test.js' }] }, { name: 'package.json' }] }]
+        };
+    },
+
+    render: function render() {
+        return _react2['default'].createElement(_reactTreePane2['default'], { model: this.state });
+    }
+});
 
 var Application = _react2['default'].createClass({
     displayName: 'Application',
@@ -26149,7 +26159,7 @@ var Application = _react2['default'].createClass({
                             _react2['default'].createElement(
                                 'div',
                                 null,
-                                _react2['default'].createElement(_reactTreePane2['default'], { model: model })
+                                _react2['default'].createElement(DemoTree, null)
                             ),
                             _react2['default'].createElement(
                                 'div',
