@@ -109,23 +109,43 @@ let Application = React.createClass({
 
     render() {
         return (
-            <Layout type="rows">
-                <Fixed className="header">
-                    <DemoSuggest onSuggestion={this.onSuggestion} />
+            <Layout type="columns">
+                <Fixed className="sidebar">
+
                 </Fixed>
-                <Flex className="content">
-                    <Layout type="columns">
-                        <Fixed>
-                            <Calendar onSelect={this.selectedDate}/>
+                <Flex>
+                    <Layout type="rows">
+
+                        <Fixed className="header">
+
+                            <Layout type="columns">
+                                <Flex>
+
+                                </Flex>
+                                <Fixed>
+                                    <DemoSuggest onSuggestion={this.onSuggestion} />
+                                </Fixed>
+                            </Layout>
                         </Fixed>
-                        <Flex>
-                            <SplitPane split="vertical" minSize="50">
-                                <div>
-                                    <DemoTree />
-                                </div>
-                                <div>right</div>
-                            </SplitPane>
+
+                        <Flex className="content">
+                            <Layout type="columns">
+                                <Fixed>
+                                    <Calendar onSelect={this.selectedDate}/>
+                                </Fixed>
+                                <Flex>
+                                    <SplitPane split="vertical" minSize="50">
+                                        <div>
+                                            <DemoTree />
+                                        </div>
+                                        <div>right</div>
+                                    </SplitPane>
+                                </Flex>
+                            </Layout>
                         </Flex>
+
+
+
                     </Layout>
                 </Flex>
             </Layout>
