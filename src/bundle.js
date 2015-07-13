@@ -4352,15 +4352,9 @@ var Fixed = _react2['default'].createClass({
 
         var styles = undefined;
         if (this.props.type === 'rows') {
-            styles = {
-                position: 'relative',
-                width: '100%'
-            };
+            styles = {};
         } else {
-            styles = {
-                position: 'relative',
-                height: '100%'
-            };
+            styles = {};
         }
 
         return _react2['default'].createElement('div', { className: classes.join(' '), style: styles }, this.props.children);
@@ -4369,6 +4363,12 @@ var Fixed = _react2['default'].createClass({
 
 exports['default'] = Fixed;
 module.exports = exports['default'];
+
+//position: 'relative',
+//width: '100%'
+
+//position: 'relative',
+//height: '100%'
 
 },{"react":199}],18:[function(require,module,exports){
 'use strict';
@@ -4411,15 +4411,12 @@ var Flex = _react2['default'].createClass({
         var style = undefined;
         if (this.props.type === 'rows') {
             style = {
-                flex: 1,
-                position: 'relative'
+                flex: 1
             };
         } else {
             style = {
                 flex: 1,
-                position: 'relative',
-                height: '100%',
-                minHeight: '100%'
+                position: 'relative'
             };
         }
         var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
@@ -4430,6 +4427,9 @@ var Flex = _react2['default'].createClass({
 
 exports['default'] = Flex;
 module.exports = exports['default'];
+//position: 'relative'
+//height: '100%',
+//minHeight: '100%'
 
 },{"react":199,"react-vendor-prefix":20}],19:[function(require,module,exports){
 'use strict';
@@ -4478,9 +4478,14 @@ var Layout = _reactAddons2['default'].createClass({
                 flex: 1,
                 flexDirection: 'column',
 
-                position: 'relative',
-                height: '100%',
-                minHeight: '100%'
+                //position: 'relative',
+                //height: '100%',
+                //minHeight: '100%'
+
+                width: '100%',
+                position: 'absolute',
+                top: 0,
+                bottom: 0
             };
         } else {
             style = {
@@ -4488,10 +4493,13 @@ var Layout = _reactAddons2['default'].createClass({
                 flex: 1,
                 flexDirection: 'row',
 
-                height: '100%',
+                //height: '100%',
                 position: 'absolute',
                 left: 0,
-                right: 0
+                right: 0,
+
+                top: 0,
+                bottom: 0
             };
         }
 
@@ -26693,9 +26701,70 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactAutoSuggest = require('react-auto-suggest');
+var _reactLayoutPane = require('react-layout-pane');
 
-var _reactAutoSuggest2 = _interopRequireDefault(_reactAutoSuggest);
+var _SidebarJs = require('./Sidebar.js');
+
+var _SidebarJs2 = _interopRequireDefault(_SidebarJs);
+
+var _HeaderJs = require('./Header.js');
+
+var _HeaderJs2 = _interopRequireDefault(_HeaderJs);
+
+var _ContentJs = require('./Content.js');
+
+var _ContentJs2 = _interopRequireDefault(_ContentJs);
+
+var _jsonp = require('jsonp');
+
+var _jsonp2 = _interopRequireDefault(_jsonp);
+
+var Application = _react2['default'].createClass({
+    displayName: 'Application',
+
+    onSuggestion: function onSuggestion(suggestion) {
+        console.info('suggested', suggestion);
+    },
+
+    selectedDate: function selectedDate(date) {
+        console.info('selected date', date);
+    },
+
+    render: function render() {
+        return _react2['default'].createElement(
+            _reactLayoutPane.Layout,
+            { type: 'columns' },
+            _react2['default'].createElement(_SidebarJs2['default'], null),
+            _react2['default'].createElement(
+                _reactLayoutPane.Flex,
+                null,
+                _react2['default'].createElement(
+                    _reactLayoutPane.Layout,
+                    { type: 'rows' },
+                    _react2['default'].createElement(_HeaderJs2['default'], { onSuggestion: this.onSuggestion }),
+                    _react2['default'].createElement(_ContentJs2['default'], { onSelect: this.selectedDate })
+                )
+            )
+        );
+    }
+});
+
+_react2['default'].render(_react2['default'].createElement(Application, null), document.body);
+
+},{"./Content.js":201,"./Header.js":202,"./Sidebar.js":203,"jsonp":2,"react":199,"react-layout-pane":16}],201:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactLayoutPane = require('react-layout-pane');
 
 var _reactSplitPane = require('react-split-pane');
 
@@ -26709,11 +26778,85 @@ var _reactTreePane = require('react-tree-pane');
 
 var _reactTreePane2 = _interopRequireDefault(_reactTreePane);
 
+var DemoTree = _react2['default'].createClass({
+    displayName: 'DemoTree',
+
+    getInitialState: function getInitialState() {
+        return {
+            name: 'Default',
+            children: [{ name: 'react-tree-pane', children: [{ name: 'demo', children: [{ name: 'bundle.js' }, { name: 'Example.js' }] }, { name: 'src', children: [{ name: 'TreePane.js' }] }, { name: 'test', children: [{ name: 'TreePane-test.js' }] }, { name: 'package.json' }] }]
+        };
+    },
+
+    render: function render() {
+        return _react2['default'].createElement(_reactTreePane2['default'], { model: this.state });
+    }
+});
+
+var Content = _react2['default'].createClass({
+    displayName: 'Content',
+
+    render: function render() {
+        return _react2['default'].createElement(
+            _reactLayoutPane.Flex,
+            { className: 'content' },
+            _react2['default'].createElement(
+                _reactLayoutPane.Layout,
+                { type: 'columns' },
+                _react2['default'].createElement(
+                    _reactLayoutPane.Fixed,
+                    { className: 'calendar-pane' },
+                    _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.props.selectedDate })
+                ),
+                _react2['default'].createElement(
+                    _reactLayoutPane.Flex,
+                    null,
+                    _react2['default'].createElement(
+                        _reactSplitPane2['default'],
+                        { split: 'vertical', minSize: '50' },
+                        _react2['default'].createElement(
+                            'div',
+                            null,
+                            _react2['default'].createElement(DemoTree, null)
+                        ),
+                        _react2['default'].createElement(
+                            'div',
+                            null,
+                            _react2['default'].createElement(
+                                _reactSplitPane2['default'],
+                                { split: 'horizontal' },
+                                _react2['default'].createElement('div', null),
+                                _react2['default'].createElement('div', null)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+exports['default'] = Content;
+module.exports = exports['default'];
+
+},{"react":199,"react-calendar-pane":11,"react-layout-pane":16,"react-split-pane":21,"react-tree-pane":26}],202:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactAutoSuggest = require('react-auto-suggest');
+
+var _reactAutoSuggest2 = _interopRequireDefault(_reactAutoSuggest);
+
 var _reactLayoutPane = require('react-layout-pane');
-
-var _jsonp = require('jsonp');
-
-var _jsonp2 = _interopRequireDefault(_jsonp);
 
 var Custom = _react2['default'].createClass({
     displayName: 'Custom',
@@ -26749,7 +26892,7 @@ var DemoSuggest = _react2['default'].createClass({
     displayName: 'DemoSuggest',
 
     suggestions: function suggestions(value, callback) {
-        (0, _jsonp2['default'])('http://api.search.sky.com/query.json?category=newtv&term=' + value, function (err, data) {
+        jsonp('http://api.search.sky.com/query.json?category=newtv&term=' + value, function (err, data) {
             if (!err) {
                 if (data.searchResults) {
                     var results = data.searchResults.map(function (result) {
@@ -26779,94 +26922,54 @@ var DemoSuggest = _react2['default'].createClass({
 
 });
 
-var DemoTree = _react2['default'].createClass({
-    displayName: 'DemoTree',
-
-    getInitialState: function getInitialState() {
-        return {
-            name: 'Default',
-            children: [{ name: 'react-tree-pane', children: [{ name: 'demo', children: [{ name: 'bundle.js' }, { name: 'Example.js' }] }, { name: 'src', children: [{ name: 'TreePane.js' }] }, { name: 'test', children: [{ name: 'TreePane-test.js' }] }, { name: 'package.json' }] }]
-        };
-    },
-
-    render: function render() {
-        return _react2['default'].createElement(_reactTreePane2['default'], { model: this.state });
-    }
-});
-
-var Application = _react2['default'].createClass({
-    displayName: 'Application',
-
-    onSuggestion: function onSuggestion(suggestion) {
-        console.info('suggested', suggestion);
-    },
-
-    selectedDate: function selectedDate(date) {
-        console.info('selected date', date);
-    },
+var Header = _react2['default'].createClass({
+    displayName: 'Header',
 
     render: function render() {
         return _react2['default'].createElement(
-            _reactLayoutPane.Layout,
-            { type: 'columns' },
-            _react2['default'].createElement(_reactLayoutPane.Fixed, { className: 'sidebar' }),
+            _reactLayoutPane.Fixed,
+            { className: 'header' },
             _react2['default'].createElement(
-                _reactLayoutPane.Flex,
-                null,
+                _reactLayoutPane.Layout,
+                { type: 'columns' },
+                _react2['default'].createElement(_reactLayoutPane.Flex, null),
                 _react2['default'].createElement(
-                    _reactLayoutPane.Layout,
-                    { type: 'rows' },
-                    _react2['default'].createElement(
-                        _reactLayoutPane.Fixed,
-                        { className: 'header' },
-                        _react2['default'].createElement(
-                            _reactLayoutPane.Layout,
-                            { type: 'columns' },
-                            _react2['default'].createElement(_reactLayoutPane.Flex, null),
-                            _react2['default'].createElement(
-                                _reactLayoutPane.Fixed,
-                                null,
-                                _react2['default'].createElement(DemoSuggest, { onSuggestion: this.onSuggestion })
-                            )
-                        )
-                    ),
-                    _react2['default'].createElement(
-                        _reactLayoutPane.Flex,
-                        { className: 'content' },
-                        _react2['default'].createElement(
-                            _reactLayoutPane.Layout,
-                            { type: 'columns' },
-                            _react2['default'].createElement(
-                                _reactLayoutPane.Fixed,
-                                null,
-                                _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.selectedDate })
-                            ),
-                            _react2['default'].createElement(
-                                _reactLayoutPane.Flex,
-                                null,
-                                _react2['default'].createElement(
-                                    _reactSplitPane2['default'],
-                                    { split: 'vertical', minSize: '50' },
-                                    _react2['default'].createElement(
-                                        'div',
-                                        null,
-                                        _react2['default'].createElement(DemoTree, null)
-                                    ),
-                                    _react2['default'].createElement(
-                                        'div',
-                                        null,
-                                        'right'
-                                    )
-                                )
-                            )
-                        )
-                    )
+                    _reactLayoutPane.Fixed,
+                    null,
+                    _react2['default'].createElement(DemoSuggest, { onSuggestion: this.props.onSuggestion })
                 )
             )
         );
     }
 });
 
-_react2['default'].render(_react2['default'].createElement(Application, null), document.body);
+exports['default'] = Header;
+module.exports = exports['default'];
 
-},{"jsonp":2,"react":199,"react-auto-suggest":6,"react-calendar-pane":11,"react-layout-pane":16,"react-split-pane":21,"react-tree-pane":26}]},{},[200]);
+},{"react":199,"react-auto-suggest":6,"react-layout-pane":16}],203:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactLayoutPane = require('react-layout-pane');
+
+var Sidebar = _react2['default'].createClass({
+    displayName: 'Sidebar',
+
+    render: function render() {
+        return _react2['default'].createElement(_reactLayoutPane.Fixed, { className: 'sidebar' });
+    }
+});
+
+exports['default'] = Sidebar;
+module.exports = exports['default'];
+
+},{"react":199,"react-layout-pane":16}]},{},[200]);

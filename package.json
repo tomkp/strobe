@@ -22,13 +22,15 @@
     "react-tree-pane": "^0.0.6"
   },
   "scripts": {
+    "watch": "watchify ./src/Application.js -t -o ./src/bundle.js",
     "build": "browserify ./src/Application.js -t -o ./src/bundle.js",
     "demo:publish": "npm run build && surge src watery-smile.surge.sh"
   },
   "devDependencies": {
     "babelify": "^6.1.3",
     "browserify": "^10.2.6",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "watchify": "^3.2.3"
   },
   "browserify": {
     "transform": [
