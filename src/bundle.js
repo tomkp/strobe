@@ -26808,38 +26808,56 @@ var Application = _react2['default'].createClass({
     render: function render() {
         return _react2['default'].createElement(
             _reactLayoutPane.Layout,
-            { type: 'rows' },
-            _react2['default'].createElement(
-                _reactLayoutPane.Fixed,
-                { className: 'header' },
-                _react2['default'].createElement(DemoSuggest, { onSuggestion: this.onSuggestion })
-            ),
+            { type: 'columns' },
+            _react2['default'].createElement(_reactLayoutPane.Fixed, { className: 'sidebar' }),
             _react2['default'].createElement(
                 _reactLayoutPane.Flex,
-                { className: 'content' },
+                null,
                 _react2['default'].createElement(
                     _reactLayoutPane.Layout,
-                    { type: 'columns' },
+                    { type: 'rows' },
                     _react2['default'].createElement(
                         _reactLayoutPane.Fixed,
-                        null,
-                        _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.selectedDate })
+                        { className: 'header' },
+                        _react2['default'].createElement(
+                            _reactLayoutPane.Layout,
+                            { type: 'columns' },
+                            _react2['default'].createElement(_reactLayoutPane.Flex, null),
+                            _react2['default'].createElement(
+                                _reactLayoutPane.Fixed,
+                                null,
+                                _react2['default'].createElement(DemoSuggest, { onSuggestion: this.onSuggestion })
+                            )
+                        )
                     ),
                     _react2['default'].createElement(
                         _reactLayoutPane.Flex,
-                        null,
+                        { className: 'content' },
                         _react2['default'].createElement(
-                            _reactSplitPane2['default'],
-                            { split: 'vertical', minSize: '50' },
+                            _reactLayoutPane.Layout,
+                            { type: 'columns' },
                             _react2['default'].createElement(
-                                'div',
+                                _reactLayoutPane.Fixed,
                                 null,
-                                _react2['default'].createElement(DemoTree, null)
+                                _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.selectedDate })
                             ),
                             _react2['default'].createElement(
-                                'div',
+                                _reactLayoutPane.Flex,
                                 null,
-                                'right'
+                                _react2['default'].createElement(
+                                    _reactSplitPane2['default'],
+                                    { split: 'vertical', minSize: '50' },
+                                    _react2['default'].createElement(
+                                        'div',
+                                        null,
+                                        _react2['default'].createElement(DemoTree, null)
+                                    ),
+                                    _react2['default'].createElement(
+                                        'div',
+                                        null,
+                                        'right'
+                                    )
+                                )
                             )
                         )
                     )
