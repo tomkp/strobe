@@ -1,17 +1,17 @@
 {
-  "name": "mdma",
+  "name": "strobe",
   "version": "1.0.0",
   "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomkp/mdma.git"
+    "url": "https://github.com/tomkp/strobe.git"
   },
   "author": "tomkp",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tomkp/mdma/issues"
+    "url": "https://github.com/tomkp/strobe/issues"
   },
-  "homepage": "https://github.com/tomkp/mdma",
+  "homepage": "https://github.com/tomkp/strobe",
   "dependencies": {
     "jsonp": "^0.2.0",
     "react": "^0.13.3",
