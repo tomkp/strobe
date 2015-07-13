@@ -17,7 +17,7 @@
     "react": "^0.13.3",
     "react-auto-suggest": "^0.0.9",
     "react-calendar-pane": "^0.0.12",
-    "react-layout-pane": "^0.1.6",
+    "react-layout-pane": "^0.1.7",
     "react-split-pane": "^0.1.6",
     "react-tree-pane": "^0.0.6"
   },

@@ -4352,9 +4352,15 @@ var Fixed = _react2['default'].createClass({
 
         var styles = undefined;
         if (this.props.type === 'rows') {
-            styles = {};
+            styles = {
+                position: 'relative'
+                //width: '100%'
+            };
         } else {
-            styles = {};
+            styles = {
+                position: 'relative'
+                //height: '100%'
+            };
         }
 
         return _react2['default'].createElement('div', { className: classes.join(' '), style: styles }, this.props.children);
@@ -4363,12 +4369,6 @@ var Fixed = _react2['default'].createClass({
 
 exports['default'] = Fixed;
 module.exports = exports['default'];
-
-//position: 'relative',
-//width: '100%'
-
-//position: 'relative',
-//height: '100%'
 
 },{"react":199}],18:[function(require,module,exports){
 'use strict';
@@ -4411,12 +4411,15 @@ var Flex = _react2['default'].createClass({
         var style = undefined;
         if (this.props.type === 'rows') {
             style = {
-                flex: 1
+                flex: 1,
+                position: 'relative'
             };
         } else {
             style = {
                 flex: 1,
                 position: 'relative'
+                //height: '100%',
+                //minHeight: '100%'
             };
         }
         var prefixed = _reactVendorPrefix2['default'].prefix({ styles: style });
@@ -4427,9 +4430,6 @@ var Flex = _react2['default'].createClass({
 
 exports['default'] = Flex;
 module.exports = exports['default'];
-//position: 'relative'
-//height: '100%',
-//minHeight: '100%'
 
 },{"react":199,"react-vendor-prefix":20}],19:[function(require,module,exports){
 'use strict';
@@ -4482,8 +4482,11 @@ var Layout = _reactAddons2['default'].createClass({
                 //height: '100%',
                 //minHeight: '100%'
 
-                width: '100%',
+                //width: '100%',
                 position: 'absolute',
+                left: 0,
+                right: 0,
+
                 top: 0,
                 bottom: 0
             };
@@ -4500,6 +4503,7 @@ var Layout = _reactAddons2['default'].createClass({
 
                 top: 0,
                 bottom: 0
+
             };
         }
 
