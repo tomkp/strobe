@@ -2,6 +2,8 @@ import React from 'react';
 import AutoSuggest from 'react-auto-suggest';
 import {Layout, Flex, Fixed} from 'react-layout-pane';
 
+import jsonp from 'jsonp';
+
 
 let Custom = React.createClass({
 

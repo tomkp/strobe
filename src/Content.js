@@ -43,7 +43,7 @@ let Content =  React.createClass({
             <Flex className="content">
                 <Layout type="columns">
                     <Fixed className="calendar-pane">
-                        <Calendar onSelect={this.props.selectedDate}/>
+                        <Calendar onSelect={this.props.onSelect}/>
                     </Fixed>
                     <Flex>
                         <SplitPane split="vertical" minSize="50">

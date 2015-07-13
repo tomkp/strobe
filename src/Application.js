@@ -7,12 +7,6 @@ import Header from './Header.js';
 import Content from './Content.js';
 
 
-import jsonp from 'jsonp';
-
-
-
-
-
 
 let Application = React.createClass({
 
@@ -21,7 +15,7 @@ let Application = React.createClass({
         console.info('suggested', suggestion);
     },
 
-    selectedDate(date) {
+    onSelect(date) {
         console.info('selected date', date);
     },
 
@@ -36,7 +30,7 @@ let Application = React.createClass({
 
                         <Header onSuggestion={this.onSuggestion} />
 
-                        <Content onSelect={this.selectedDate} />
+                        <Content onSelect={this.onSelect} />
 
                     </Layout>
                 </Flex>

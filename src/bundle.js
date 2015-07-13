@@ -26719,10 +26719,6 @@ var _ContentJs = require('./Content.js');
 
 var _ContentJs2 = _interopRequireDefault(_ContentJs);
 
-var _jsonp = require('jsonp');
-
-var _jsonp2 = _interopRequireDefault(_jsonp);
-
 var Application = _react2['default'].createClass({
     displayName: 'Application',
 
@@ -26730,7 +26726,7 @@ var Application = _react2['default'].createClass({
         console.info('suggested', suggestion);
     },
 
-    selectedDate: function selectedDate(date) {
+    onSelect: function onSelect(date) {
         console.info('selected date', date);
     },
 
@@ -26746,7 +26742,7 @@ var Application = _react2['default'].createClass({
                     _reactLayoutPane.Layout,
                     { type: 'rows' },
                     _react2['default'].createElement(_HeaderJs2['default'], { onSuggestion: this.onSuggestion }),
-                    _react2['default'].createElement(_ContentJs2['default'], { onSelect: this.selectedDate })
+                    _react2['default'].createElement(_ContentJs2['default'], { onSelect: this.onSelect })
                 )
             )
         );
@@ -26755,7 +26751,7 @@ var Application = _react2['default'].createClass({
 
 _react2['default'].render(_react2['default'].createElement(Application, null), document.body);
 
-},{"./Content.js":201,"./Header.js":202,"./Sidebar.js":203,"jsonp":2,"react":199,"react-layout-pane":16}],201:[function(require,module,exports){
+},{"./Content.js":201,"./Header.js":202,"./Sidebar.js":203,"react":199,"react-layout-pane":16}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26810,7 +26806,7 @@ var Content = _react2['default'].createClass({
                 _react2['default'].createElement(
                     _reactLayoutPane.Fixed,
                     { className: 'calendar-pane' },
-                    _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.props.selectedDate })
+                    _react2['default'].createElement(_reactCalendarPane2['default'], { onSelect: this.props.onSelect })
                 ),
                 _react2['default'].createElement(
                     _reactLayoutPane.Flex,
@@ -26862,6 +26858,10 @@ var _reactAutoSuggest2 = _interopRequireDefault(_reactAutoSuggest);
 
 var _reactLayoutPane = require('react-layout-pane');
 
+var _jsonp = require('jsonp');
+
+var _jsonp2 = _interopRequireDefault(_jsonp);
+
 var Custom = _react2['default'].createClass({
     displayName: 'Custom',
 
@@ -26896,7 +26896,7 @@ var DemoSuggest = _react2['default'].createClass({
     displayName: 'DemoSuggest',
 
     suggestions: function suggestions(value, callback) {
-        jsonp('http://api.search.sky.com/query.json?category=newtv&term=' + value, function (err, data) {
+        (0, _jsonp2['default'])('http://api.search.sky.com/query.json?category=newtv&term=' + value, function (err, data) {
             if (!err) {
                 if (data.searchResults) {
                     var results = data.searchResults.map(function (result) {
@@ -26950,7 +26950,7 @@ var Header = _react2['default'].createClass({
 exports['default'] = Header;
 module.exports = exports['default'];
 
-},{"react":199,"react-auto-suggest":6,"react-layout-pane":16}],203:[function(require,module,exports){
+},{"jsonp":2,"react":199,"react-auto-suggest":6,"react-layout-pane":16}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
