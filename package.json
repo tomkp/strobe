@@ -15,22 +15,32 @@
   "dependencies": {
     "jsonp": "^0.2.0",
     "react": "^0.13.3",
-    "react-auto-suggest": "^0.0.9",
-    "react-calendar-pane": "^0.0.12",
-    "react-layout-pane": "^0.1.7",
-    "react-split-pane": "^0.1.6",
-    "react-tree-pane": "^0.0.6"
+    "react-auto-suggest": "^0.0.10",
+    "react-calendar-pane": "^0.0.13",
+    "react-layout-pane": "^0.1.8",
+    "react-split-pane": "^0.1.7",
+    "react-tree-pane": "^0.0.7"
   },
   "scripts": {
-    "watch": "watchify ./src/Application.js -t -o ./src/bundle.js",
-    "build": "browserify ./src/Application.js -t -o ./src/bundle.js",
-    "demo:publish": "npm run build && surge src watery-smile.surge.sh"
+    "watch": "watchify ./js/Application.js -t -o ./dist/bundle.js",
+    "build": "browserify ./js/Application.js -t -o ./dist/bundle.js",
+    "demo:publish": "npm run build && surge src watery-smile.surge.sh",
+    "start-x": "webpack-dev-server --hot  --inline --progress --colors",
+    "build-x": "webpack --progress --colors"
   },
   "devDependencies": {
+    "babel-core": "^5.6.20",
+    "babel-loader": "^5.3.1",
+    "babel-runtime": "^5.6.20",
     "babelify": "^6.1.3",
     "browserify": "^10.2.6",
+    "node-libs-browser": "^0.5.2",
+    "react-hot-loader": "^1.2.8",
+    "react-router": "^0.13.3",
     "reactify": "^1.1.1",
-    "watchify": "^3.2.3"
+    "watchify": "^3.2.3",
+    "webpack": "^1.10.1",
+    "webpack-dev-server": "^1.10.1"
   },
   "browserify": {
     "transform": [

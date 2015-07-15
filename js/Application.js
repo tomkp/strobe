@@ -39,4 +39,4 @@ let Application = React.createClass({
     }
 });
 
-React.render(<Application />, document.body);
+React.render(<Application />, document.getElementById('react'));

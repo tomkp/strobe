@@ -52,8 +52,8 @@ let Content =  React.createClass({
                             </div>
                             <div>
                                 <SplitPane split="horizontal">
-                                    <div></div>
-                                    <div></div>
+                                    <div>x</div>
+                                    <div>y</div>
                                 </SplitPane>
                             </div>
                         </SplitPane>
